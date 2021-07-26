@@ -1,0 +1,64 @@
+{% extends 'Profiles/base.html' %}
+
+{% block title %}
+ All Profiles
+{% endblock %}
+
+{% block body%}
+{% if is_empty%}
+  <h1>No profile.</h1>
+{% endif %}
+
+
+{% for profiles in qs %}
+  <div class="container-post mx-2 my-2">
+      <div class="card" style="width:100%;">
+          <div class="row">
+              <div class="col-4">
+                  <img src="{{profiles.avatar.url}}" class="card-img-top" alt="..." style="width: 200px; height:200px;">
+              </div>
+
+              <div class="col-4">
+                  <div class="card-body">
+                      <b>Username:</b>{{profiles.user}}<br />
+                      <hr />
+                      <b>Bio:</b>{{profiles.bio}}
+                      <br />
+                      <hr />
+                      <a href="{{profiles.get_absolute_url}}"><button class="btn btn-info">Profile</button></a>
+                      <br />
+                      <br />
+                      {% if profiles.user not in rel_receiver and profiles.user not in rel_sender %}
+                      <form action="{% url 'send-invite' %}" method="post">
+                          {% csrf_token %}
+                          <input type="hidden" name="profile_pk" value="{{profiles.pk}}" />
+
+                          <button type="submit" class="btn btn-success">Add friend</button>
+
+                      </form>
+                      {% endif %}
+                      <br />
+                      {% if profiles.user in rel_receiver and request.user not in profiles.friends.all %}
+                        <button type="submit" class="btn btn-success">Waiting for approval</button>
+                      {% endif %}
+                      <br />
+                      {% if request.user in profiles.friends.all %}
+                          <form action="{% url 'remove-friend' %}" method="post">
+                              {% csrf_token %}
+                              <input type="hidden" name="profile_pk" value="{{profiles.pk}}" />
+
+                              <button type="submit" class="btn btn-danger">Remove</button>
+
+                          </form>
+                      {% endif %}
+                  </div>
+              </div>
+          </div>
+          
+      </div>
+  </div>
+    
+{% endfor %}
+
+
+{% endblock %}

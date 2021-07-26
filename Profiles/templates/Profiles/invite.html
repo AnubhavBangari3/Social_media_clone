@@ -1,0 +1,48 @@
+{% extends 'Profiles/base.html' %}
+
+{% block title %}
+ Invite
+{% endblock %}
+
+{% block body%}
+{% if isEmpty %}
+<h1>No invitaitions</h1>
+
+{% endif %}
+
+
+{% for invite in qs %}
+    <div class="container-fluid mx-2 my-4">
+        <div class="row">
+            <div class="col-3">
+               <img src="{{invite.avatar.url}}" style="width:200px; height:200px;" />
+            </div>
+            <div class="col-5">
+                <p><b>Username:</b>{{invite}}</p>
+                <p><b>Bio:</b>{{invite.bio}}</p>
+                <br />
+                <a href="">
+                    <button class="btn btn-primary">Profile</button>
+                </a>
+                <br />
+                <br />
+                <form action="{% url 'accept-invite' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{invite.pk}}" />
+                    <button class="btn btn-primary">Accept</button>
+                </form>
+                <br />
+                <form action="{% url 'reject-invite' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{invite.pk}}" />
+                    <button class="btn btn-danger">Decline</button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+
+{% endfor %}
+
+
+{% endblock %}

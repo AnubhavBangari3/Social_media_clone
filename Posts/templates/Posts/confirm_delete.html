@@ -1,0 +1,33 @@
+{% extends 'Profiles/base.html' %}
+
+
+{% block title %}
+ delete
+{% endblock %}
+
+{% block body %}
+<div class="card my-2" style="width: auto; display:flex;justify-content:center;text-align:center;">
+    <div class="card-body">
+        {% if messages %}
+         {% for message in messages %}
+           {% if 'warning' in message.tags %}
+            <div class="alert alert-danger" role="alert">
+                {{message}}
+            </div>
+           {% endif %}
+         {% endfor %}
+        {% endif %}
+
+        {% if not messages %}
+          <h3> Delete Message?</h3>
+           <form method="POST" action="">
+               {% csrf_token %}
+               <p>Are you sure you want delete?</p>
+               <button type="submit">Submit</button>
+           </form>
+
+
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

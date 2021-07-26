@@ -1,0 +1,25 @@
+{% extends 'Profiles/base.html' %} {% block title %} Invite Friends {% endblock %} {% block body%}
+
+
+<div class="invite-profile my-2 mx-2">
+    {% for profiles in qs %}
+    <div class="card" style="width:600px; ">
+
+        <div class="row">
+            <div class="col-4 mx-2">
+                <img src="{{profiles.avatar.url}}" class="card-img-top" alt="..." style="width:200px;height:200px;;">
+            </div>
+            <div class="col-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{profiles}}</h5>
+                    <p class="card-text">{{profiles.bio}}</p>
+                    <a href="{{profiles.get_absolute_url}}" class="btn btn-primary">Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br /> {% endfor %}
+</div>
+
+
+{% endblock %}

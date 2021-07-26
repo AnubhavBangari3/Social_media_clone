@@ -1,0 +1,108 @@
+{% extends 'Profiles/base.html' %}
+
+
+{% block title %}
+ Post
+{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+{% if post_added %}
+<div class="alert alert-dark" role="alert">
+    Post added successfully.
+</div>
+    {% endif %}
+<h2 style="display: flex; justify-content: center; align-items: center;">New POST:</h2>
+<div class="post-form" style="display: flex; justify-content: center; align-items: center;">
+
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{post_form.as_p}}
+        <button type="submit" class="btn btn-primary" name="submit-post-form">Submit</button>
+    </form>
+</div>
+<br />
+<h2 style="display: flex; justify-content: center; align-items: center;">POST:</h2>
+<hr />
+{% for post in qs %}
+<div class="container-post my-4 mx-4" style="display: flex; justify-content: center; align-items: center;">
+
+    <div class="card-post border border-white-2 my-4">
+
+        {% if post.image %}
+        <img src="{{post.image.url}}" class="card-img-top my-2" alt="..." style="width:400px; height:400px;">
+        {% endif %}
+        <div class="row">
+            {% ifequal request.user post.author.user %}
+            <div class="col-1">
+                <a href="{% url 'update-post' post.pk %}"><button class="btn btn-info">Update</button></a>
+
+            </div>
+            <div class="col-1">
+                <a href="{% url 'delete-post' post.pk %}"><button class="btn btn-danger">Delete</button></a>
+            </div>
+            {% endifequal %}
+        </div>
+        <div class="card-body ">
+            <hr />
+            <b><p class="card-text">{{post.context}}</p></b>
+            <form action="{% url 'like-post-view' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="post_id" value="{{post.id}}" />
+                <hr />
+                {% if profile not in post.liked.all  %}
+                <button type="submit" class="btn btn-info mx-4">
+                    <i class="glyphicon glyphicon-thumbs-up mx-2"></i>
+                </button>Likes:{{post.num_likes}}
+                {% else %}
+                <button type="submit" class="btn btn-danger mx-4">
+                    <i class="glyphicon glyphicon-thumbs-down mx-2"></i>
+                </button>Likes:{{post.num_likes}}
+                {% endif %}
+
+            </form>
+            <div class="comment my-2">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <h5>Comment -</h5>
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                {% if post.comment_post.all %}
+                                {% for c in post.comment_post.all %}
+                                <p><b>By {{c.user}} - </b> {{c.body}}</p>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <br />
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="post_id" value="{{post.id}}" />
+                {{comment_form}}
+                <button class="btn btn-primary" name="submit-comment-form">Comment</button>
+            </form>
+            <br />
+
+        </div>
+    </div>
+    <hr />
+</div>
+<br />
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
