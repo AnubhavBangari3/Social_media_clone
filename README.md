@@ -8,3 +8,4 @@ Functions -
 3) User can post,edit and delete Posts.
 4) User can follow oher users.
 5) User can like and unlike posts.
+6)Users can comment on other users post.
