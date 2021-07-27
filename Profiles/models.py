@@ -66,13 +66,7 @@ class Profile(models.Model):
     def get_all_author_post(self):
         return self.posts.all()
 
-    def get_likes_given_no(self):
-        likes=self.like_post.all()
-        total_liked=0
-        for item in likes:
-            if item.value == 'Like':
-                total_liked+=1
-        return total_liked
+    
     def get_likes_received_no(self):
         posts=self.posts.all()
         total_liked=0
