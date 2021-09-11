@@ -1,0 +1,57 @@
+{% extends 'Profiles/base.html' %}
+
+{% block title %}
+ Invite
+{% endblock %}
+
+
+{% block body%}
+
+<div class="heading" style="display: flex;justify-content:center;">
+    <h1>RECEIVED INVITE</h1>
+</div>
+{% if isEmpty %}
+<h1>No invitaitions</h1>
+
+{% endif %}
+
+
+<div class="received" style="display: flex;flex-wrap:wrap;">
+    {% for invite in qs %}
+    <div class="card mx-2 my-4" style="width:490px;">
+        <div class="row">
+            <div class="col-4" style="display:flex; flex-direction:column;">
+               <img class="img-fluid" src="{{invite.avatar.url}}" style="width:200px; height:200px;" />
+               <a href="{{invite.get_absolute_url}}">
+                <button class="btn btn-primary my-2 mx-2">View</button>
+            </a>
+            <br />
+            </div>
+            <div class="col-4">
+                <p><b>Username:</b>{{invite}}</p>
+                <hr>
+                <p><b>Bio:</b>{{invite.bio}}</p>
+                <hr>
+                
+                <form action="{% url 'accept-invite' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{invite.pk}}" />
+                    <button class="btn btn-primary">Accept</button>
+                </form>
+                <br />
+                <form action="{% url 'reject-invite' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{invite.pk}}" />
+                    <button class="btn btn-danger">Decline</button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+    <hr>
+
+{% endfor %}
+</div>
+
+
+{% endblock %}

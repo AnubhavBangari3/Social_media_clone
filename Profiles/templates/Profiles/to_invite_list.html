@@ -1,0 +1,29 @@
+{% extends 'Profiles/base.html' %} {% block title %} Invite Friends {% endblock %} {% block body%}
+
+<div class="heading" style="display: flex;justify-content:center;">
+    <h1>TO INVITE SUGGESTIONS</h1>
+</div>
+<div class="invite-profile" style="display: flex;flex-wrap:wrap;">
+    
+    {% for profiles in qs %}
+    <div class="card my-2 mx-2" style="width:490px;;display: flex;flex-wrap:wrap;">
+            
+        <div class="row">
+            
+            <div class="col-4">
+                <img src="{{profiles.avatar.url}}" class="card-img-top img-fluid" alt="..." style="width:200px; height:200px;;">
+            </div>
+            <div class="col-6">
+                <div class="card-body">
+                    <h5 class="card-title"><b>Username:</b> {{profiles}}</h5><hr>
+                    <p class="card-text"><b>Bio:</b>{{profiles.bio}}</p><hr>
+                    <a href="{{profiles.get_absolute_url}}" class="btn btn-primary">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br /> {% endfor %}
+</div>
+
+
+{% endblock %}
